@@ -11,7 +11,7 @@ vector<vector<string>> LerStopWord(){
 	StopFile.open("stopwords.txt");
 
 	while (getline(StopFile, myText)){
-		textLen = myText.length() - 1;
+		textLen = myText.length();
 		while (textLen > int(auxVector.size())){
 			vector<string> auxSize;
 			auxVector.push_back(auxSize);
@@ -43,14 +43,15 @@ unordered_map<string, int> LerArquivo(string doc_name, vector<vector<string>> st
 				palavra = (linha.substr(0, pos));		// Palavra auxiliar pega do começo da linha até o primeiro delimitador
 				linha.erase(0, pos + delimiter.size()); // Apago a linha até o delimitador para o próximo ciclo
 				palavra = string_treatment(palavra);
-
-				if (palavra.size() <= stopwords.size()){
-					if (!check_if_stopword(stopwords[palavra.size() - 1], palavra)){
+				if(palavra.size()>0 && !palavra.empty()){
+					if (palavra.size() <= stopwords.size()){
+						if (!check_if_stopword(stopwords[palavra.size() - 1], palavra)){
+							HInsert(&HW, palavra);
+						}
+					}
+					else{
 						HInsert(&HW, palavra);
 					}
-				}
-				else{
-					HInsert(&HW, palavra);
 				}
 			}
 		}
@@ -110,20 +111,22 @@ void CompactarArquivo(string doc_name, unordered_map<string, string> HWH, vector
 				palavra = (linha.substr(0, pos));		// Palavra auxiliar pega do começo da linha até o primeiro delimitador
 				linha.erase(0, pos + delimiter.size()); // Apago a linha até o delimitador para o próximo ciclo
 				palavra = string_treatment(palavra);
-
-				if (palavra.size() <= stopwords.size()){
-					if (!check_if_stopword(stopwords[palavra.size() - 1], palavra)){
+				
+				if(palavra.size()>0 && !palavra.empty()){
+					if (palavra.size() <= stopwords.size()){
+						if (!check_if_stopword(stopwords[palavra.size() - 1], palavra)){
+							char* aux_bin = new char[HWH.at(palavra).length() + 1];
+							strcpy(aux_bin, HWH.at(palavra).c_str()); 
+							CreateFile.write(aux_bin, HWH.at(palavra).length() + 1);
+							CreateFile.write(aux_delimiter, 2);
+						}
+					}
+					else{
 						char* aux_bin = new char[HWH.at(palavra).length() + 1];
 						strcpy(aux_bin, HWH.at(palavra).c_str()); 
 						CreateFile.write(aux_bin, HWH.at(palavra).length() + 1);
-						CreateFile.write(aux_delimiter, 2);
+						CreateFile.write(aux_delimiter, 2);	
 					}
-				}
-				else{
-					char* aux_bin = new char[HWH.at(palavra).length() + 1];
-					strcpy(aux_bin, HWH.at(palavra).c_str()); 
-					CreateFile.write(aux_bin, HWH.at(palavra).length() + 1);
-					CreateFile.write(aux_delimiter, 2);	
 				}
 			}
 			CreateFile.write(aux_line, 2);

@@ -58,12 +58,12 @@ int main(){
 				HWH.clear();
 				HWH = HuffmanPath(VW[0]); // Hash Word Huffman
 				
-				/*
-				// Para mostrar em tela as palavras e seu código Huffman
+				
+				/* // Para mostrar em tela as palavras e seu código Huffman
 				for ( auto local_it = HWH.begin(); local_it != HWH.end(); ++local_it ){
 					cout << "Palavra: " << local_it->first << " : " << local_it->second << endl;
-				}
-				*/
+				} */
+				
 
 				// Criar um novo arquivo enquanto lê o anterior substituindo as palavras pelo código binário
 
